@@ -1,0 +1,1322 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="color-scheme" content="light" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Premium | Good Expectations</title>
+  <meta name="description" content="Members-only market intelligence from Good Expectations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --page: #f4f2ea; --surface: #fbfaf5; --surface-2: #ebe8de;
+      --ink: #161713; --muted: #5f625b; --line: #d6d2c5; --line-strong: #b9b5a9;
+      --accent: #d9ff43; --accent-soft: #eaff9a; --button-ink: #f8f7f0;
+      --success: #275c45; --danger: #a33b2e; --shadow: rgba(22, 23, 19, .11);
+      --max: 1120px; --pad: clamp(20px, 4.2vw, 64px);
+      --mono: "DM Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--page); color: var(--ink);
+      font-family: "Manrope", sans-serif; line-height: 1.55; -webkit-font-smoothing: antialiased;
+      padding-bottom: 54px; }
+    ::selection { background: var(--accent); color: #11120f; }
+    :focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 72%, var(--ink)); outline-offset: 3px; }
+    .wrap { width: min(100% - 2 * var(--pad), var(--max)); margin-inline: auto; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .sysbar { position: fixed; inset: auto 0 0 0; z-index: 120; display: flex; align-items: center; gap: 16px;
+      background: var(--ink); color: var(--button-ink); font: 500 11px/1 var(--mono); letter-spacing: .04em;
+      padding: 12px 18px; white-space: nowrap; overflow: hidden; }
+    .sysbar .brand-bit { color: var(--accent); }
+    .sysbar .file { overflow: hidden; text-overflow: ellipsis; }
+    .sysbar .spacer { flex: 1 1 auto; }
+    .sysbar .dim { color: color-mix(in srgb, var(--button-ink) 60%, transparent); }
+    .sysbar .live { display: inline-flex; align-items: center; gap: 7px; }
+    .sysbar .live i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 8px var(--accent); animation: live-pulse 2.2s ease-in-out infinite; }
+    @keyframes live-pulse { 50% { opacity: .3; } }
+    .mast { position: sticky; top: 0; z-index: 50; border-bottom: 1px solid var(--line);
+      background: color-mix(in srgb, var(--page) 90%, transparent); backdrop-filter: blur(16px); }
+    .nav-shell { min-height: 70px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; font: 500 15px/1 var(--mono);
+      color: var(--ink); text-decoration: none; letter-spacing: -.01em; }
+    .brand-mark { width: 25px; height: 25px; display: grid; place-items: center; border-radius: 6px;
+      background: var(--ink); color: var(--accent); font: 500 11px/1 var(--mono); }
+    .nav-right { display: flex; align-items: center; gap: 14px; font-size: 13px; }
+    .nav-pill { padding: 6px 12px; border-radius: 4px; background: var(--ink); color: var(--accent);
+      font: 500 10px/1.2 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+    .nav-right a { font-weight: 600; color: var(--ink); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    main { padding: 0 0 90px; }
+    .hero { padding: clamp(56px, 8vw, 104px) 0 clamp(30px, 4vw, 48px); }
+    .hero-center { text-align: center; }
+    .hero-center .lede { margin-inline: auto; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 20px; color: var(--muted);
+      font: 500 12px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .eyebrow::before { content: ">"; color: var(--ink); }
+    h1 { margin: 0 0 20px; font-family: var(--mono); font-weight: 500;
+      font-size: clamp(32px, 5vw, 56px); line-height: 1.12; letter-spacing: -.02em; }
+    h2 { margin: 0; font-family: var(--mono); font-weight: 500;
+      font-size: clamp(20px, 2.4vw, 28px); letter-spacing: -.01em; }
+    .lede { max-width: 640px; color: var(--muted); font-size: clamp(16px, 1.8vw, 19px); margin: 0; }
+    .termwin { border: 1px solid var(--line-strong); border-radius: 10px; background: var(--surface);
+      box-shadow: 0 18px 48px var(--shadow); overflow: hidden; }
+    .termbar { display: flex; align-items: center; gap: 12px; padding: 10px 16px;
+      background: var(--surface-2); border-bottom: 1px solid var(--line);
+      font: 500 11px/1.5 var(--mono); color: var(--muted); }
+    .tdots { display: inline-flex; gap: 6px; flex: 0 0 auto; }
+    .tdots i { width: 10px; height: 10px; border-radius: 50%; border: 1px solid var(--line-strong); }
+    .tdots i.on { background: var(--accent); border-color: var(--accent); }
+    .termtitle { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar-meta { margin-left: auto; white-space: nowrap; }
+    .termbody { padding: clamp(22px, 3.4vw, 36px); }
+    .prompt { color: var(--ink); }
+    .caret { display: inline-block; width: .6em; height: 1.05em; margin-left: 6px; vertical-align: -.18em;
+      background: var(--accent); animation: caret-blink 1.06s steps(1) infinite; }
+    @keyframes caret-blink { 50% { opacity: 0; } }
+    .cmd { font: 500 14px/1.6 var(--mono); margin: 0 0 22px; }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .auth-card { max-width: 520px; margin: clamp(6px, 2vw, 18px) auto 0; }
+    .tabs { display: flex; gap: 6px; margin-bottom: 26px; padding: 5px;
+      border: 1px solid var(--line); border-radius: 8px; background: var(--surface-2); }
+    .tabs button { flex: 1; padding: 10px; border: 0; border-radius: 5px; background: transparent;
+      color: var(--muted); font: 500 13px/1.3 var(--mono); cursor: pointer;
+      transition: background .18s, color .18s; }
+    .tabs button:hover { color: var(--ink); }
+    .tabs button.active { background: var(--ink); color: var(--accent); }
+    .field { display: grid; gap: 8px; margin-bottom: 18px; }
+    .field label { color: var(--muted); font: 500 11px/1.3 var(--mono);
+      text-transform: uppercase; letter-spacing: .06em; }
+    .field label::before { content: "> "; color: var(--ink); }
+    .field input { width: 100%; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px;
+      background: var(--page); color: var(--ink); font: 400 15px/1.4 var(--mono); outline: 0;
+      transition: border-color .18s, box-shadow .18s; }
+    .field input:focus { border-color: var(--ink);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 45%, transparent); }
+    .button { display: inline-flex; min-height: 52px; align-items: center; justify-content: center; gap: 10px;
+      padding: 13px 26px; border: 1px solid var(--ink); border-radius: 8px; background: var(--ink);
+      color: var(--button-ink); font: 500 14px/1.2 var(--mono); letter-spacing: .04em; cursor: pointer; width: 100%;
+      transition: background .18s, color .18s, transform .18s; }
+    .button:hover { background: var(--accent); border-color: var(--accent); color: #11120f; transform: translateY(-2px); }
+    .button:disabled { opacity: .55; cursor: wait; }
+    .status { min-height: 22px; margin: 16px 0 0; font: 400 13px/1.5 var(--mono); color: var(--muted); }
+    .status.error { color: var(--danger); }
+    .status.ok { color: var(--success); }
+    .fineprint { margin: 22px 0 0; font-size: 12px; color: var(--muted); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .perks { max-width: 880px; margin: 34px auto 0; }
+    .feat { display: grid; gap: 14px; }
+    .feat p { margin: 0; font-size: 14px; }
+    .feat .prompt { margin-right: 10px; }
+    .feat strong { font: 500 14px/1.5 var(--mono); }
+    .feat .dim { color: var(--muted); }
+    .editor { margin-top: clamp(30px, 4vw, 44px); }
+    .member-tabs { display: flex; gap: 4px; padding: 8px 8px 0; background: var(--surface-2);
+      border: 1px solid var(--line); border-bottom: 0; border-radius: 12px 12px 0 0; overflow-x: auto; }
+    .member-tab { flex: 0 0 auto; border: 1px solid transparent; border-bottom: 0; background: transparent;
+      padding: 12px 22px; border-radius: 8px 8px 0 0; font: 500 13px/1.4 var(--mono); color: var(--muted);
+      cursor: pointer; white-space: nowrap; transition: background .18s, color .18s; }
+    .member-tab:hover { color: var(--ink); background: color-mix(in srgb, var(--surface) 65%, transparent); }
+    .member-tab.active { background: var(--surface); color: var(--ink); border-color: var(--line);
+      box-shadow: inset 0 3px 0 var(--accent); }
+    .member-panel { border: 1px solid var(--line); border-top: 0; border-radius: 0 0 12px 12px;
+      background: var(--surface); padding: clamp(22px, 3.4vw, 40px);
+      box-shadow: 0 18px 48px var(--shadow); animation: panel-in .28s ease; }
+    @keyframes panel-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .feed-head { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 22px; flex-wrap: wrap; }
+    .panel-sub { margin: 8px 0 0; color: var(--muted); font-size: 15px; }
+    .table-shell { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font: 400 13px/1.5 var(--mono); min-width: 900px; }
+    thead th { text-align: left; padding: 12px 14px; color: var(--muted);
+      font: 500 10px/1.3 var(--mono); text-transform: uppercase; letter-spacing: .06em;
+      border-bottom: 1px solid var(--line-strong); white-space: nowrap; }
+    tbody td { padding: 12px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+    tbody tr:last-child td { border-bottom: 0; }
+    tbody tr:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+    #trades-body { counter-reset: ln; }
+    #trades-body > tr { counter-increment: ln; }
+    td.ln::before { content: counter(ln, decimal-leading-zero); }
+    td.ln, th.ln { width: 1%; text-align: right; color: var(--line-strong); user-select: none; white-space: nowrap; }
+    .pol strong { display: block; font-size: 13px; font-weight: 500; }
+    .pol span { color: var(--muted); font-size: 11px; }
+    .issuer strong { display: block; font-size: 13px; font-weight: 500; }
+    .issuer span { color: var(--muted); font-size: 11px; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 5px; border: 1px solid var(--line);
+      font: 500 11px/1.5 var(--mono); letter-spacing: .03em; white-space: nowrap; }
+    .badge.buy { color: var(--success); border-color: color-mix(in srgb, var(--success) 40%, var(--line));
+      background: color-mix(in srgb, var(--success) 10%, transparent); }
+    .badge.buy::before { content: "+"; margin-right: 5px; }
+    .badge.sell { color: var(--danger); border-color: color-mix(in srgb, var(--danger) 40%, var(--line));
+      background: color-mix(in srgb, var(--danger) 8%, transparent); }
+    .badge.sell::before { content: "\2013"; margin-right: 5px; }
+    .num { font-size: 12px; white-space: nowrap; }
+    .loading { padding: 44px 20px; text-align: center; color: var(--muted); font: 400 13px/1.5 var(--mono); }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    .how-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .how-card { border: 1px solid var(--line); border-radius: 10px; background: var(--page);
+      padding: clamp(26px, 3vw, 36px); }
+    .how-card.accent { background: var(--accent); border-color: var(--accent); color: #11120f; }
+    .how-card.dark { background: var(--ink); border-color: var(--ink); color: var(--button-ink); }
+    .how-index { display: block; margin-bottom: 40px; color: var(--muted);
+      font: 500 11px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+    .how-index::before { content: "// "; }
+    .how-card.accent .how-index { color: #424535; }
+    .how-card.dark .how-index { color: color-mix(in srgb, var(--button-ink) 60%, transparent); }
+    .how-card h3 { margin: 0 0 12px; font: 500 20px/1.25 var(--mono); letter-spacing: -.01em; }
+    .how-card p { margin: 0; font-size: 15px; color: var(--muted); }
+    .how-card.accent p { color: #424535; }
+    .how-card.dark p { color: color-mix(in srgb, var(--button-ink) 70%, transparent); }
+    .account-card { max-width: 640px; }
+    .account-row { display: flex; align-items: center; justify-content: space-between; gap: 18px;
+      padding: 16px 0; border-bottom: 1px dashed var(--line); font-family: var(--mono); }
+    .account-row:first-child { padding-top: 0; }
+    .account-label { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+    .account-label::before { content: "> "; color: var(--ink); }
+    .account-value { font-weight: 500; }
+    .who { font-weight: 500; font-size: 14px; word-break: break-all; text-align: right; }
+    .account-card .button { width: auto; margin-top: 26px; padding-inline: 38px; }
+    .game-picker { display: flex; align-items: center; gap: 8px; margin: 0 0 16px; flex-wrap: wrap;
+      font: 500 12px/1.5 var(--mono); color: var(--muted); }
+    .game-picker .cmd-name { margin-right: 4px; }
+    .game-pick { border: 1px solid var(--line); background: transparent; color: var(--muted);
+      font: 500 12px/1.4 var(--mono); padding: 8px 14px; border-radius: 6px; cursor: pointer;
+      transition: background .18s, color .18s, border-color .18s; }
+    .game-pick:hover { color: var(--ink); border-color: var(--line-strong); }
+    .game-pick.active { background: var(--ink); border-color: var(--ink); color: var(--accent); }
+    .game-pick .prompt { margin-right: 7px; color: inherit; }
+    .game-shell { background: var(--ink); }
+    .game-shell iframe { display: block; width: 100%; height: 70vh; min-height: 440px; border: 0; background: var(--ink); } .intel-shell { background: var(--ink); border-radius: 12px; overflow: hidden; } .intel-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid rgba(248,247,240,.14); font: 500 11px/1.4 var(--mono); letter-spacing: .06em; color: var(--button-ink); } .intel-live { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent); } .intel-updated { margin-left: auto; color: rgba(248,247,240,.55); letter-spacing: .02em; } .intel-list { list-style: none; margin: 0; padding: 0; max-height: 70vh; overflow: auto; } .intel-row { display: grid; grid-template-columns: 34px 62px 118px 1fr; gap: 10px; align-items: start; padding: 10px 16px; border-top: 1px solid rgba(248,247,240,.07); font: 400 12px/1.55 var(--mono); } .intel-row:first-child { border-top: 0; } .intel-n { color: rgba(248,247,240,.32); text-align: right; } .intel-t { color: rgba(248,247,240,.6); white-space: nowrap; } .intel-s { justify-self: start; background: var(--accent); color: #11120f; border-radius: 3px; padding: 1px 7px; font-size: 10.5px; font-weight: 500; letter-spacing: .05em; white-space: nowrap; } .intel-a { color: var(--button-ink); text-decoration: none; border-bottom: 1px dotted rgba(248,247,240,.4); } .intel-a:hover { color: var(--accent); border-bottom-color: var(--accent); } .intel-d { display: block; color: rgba(248,247,240,.62); font-size: 11.5px; margin-top: 2px; } .intel-note { padding: 26px 16px; text-align: center; color: rgba(248,247,240,.6); font: 400 12.5px/1.6 var(--mono); }
+    .game-note { margin: 18px 2px 0; font: 400 12px/1.6 var(--mono); color: var(--muted); }
+    .game-note .dim { color: var(--line-strong); }
+    [hidden] { display: none !important; }
+    footer { border-top: 1px solid var(--line); padding: 28px 0; color: var(--muted);
+      font: 500 10px/1.4 var(--mono); text-transform: uppercase; letter-spacing: .04em; }
+    footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    footer a { color: inherit; }
+
+
+
+    @media (max-width: 900px) {
+      .how-grid { grid-template-columns: 1fr; }
+      .how-index { margin-bottom: 24px; }
+      .perks { max-width: 520px; }
+      .member-tab { padding: 12px 16px; font-size: 12px; }
+    }
+    @media (max-width: 700px) {
+      .feed-head { align-items: flex-start; flex-direction: column; }
+      .account-card .button { width: 100%; }
+      .sysbar .hide-sm { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { transition-duration: .001ms !important; animation-duration: .001ms !important; }
+    }
+  </style>
+</head>
+<body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <div class="sysbar" aria-hidden="true">
+    <span class="brand-bit">GE PREMIUM</span>
+    <span class="file">~/insider-trading-live-feed</span>
+    <span class="spacer"></span>
+    <span class="dim hide-sm">utf-8 &middot; main</span>
+    <span class="live"><i></i>live</span>
+  </div>
+  <header class="mast">
+    <div class="wrap nav-shell">
+      <a class="brand" href="/"><span class="brand-mark">GE</span>Good Expectations</a>
+      <div class="nav-right">
+        <span class="nav-pill">Premium</span>
+        <a href="/" id="home-link">&larr; Home</a>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="wrap">
+      <section id="auth-view" hidden>
+        <div class="hero hero-center">
+          <p class="eyebrow">Members only</p>
+          <h1>Premium market<br>intelligence.</h1>
+          <p class="lede">Live unusual options flow and congressional trade tracking, reserved for members. Log in or create an account to continue.</p>
+        </div>
+        <div class="termwin auth-card">
+          <div class="termbar">
+            <span class="tdots" aria-hidden="true"><i class="on"></i><i></i><i></i></span>
+            <span class="termtitle">~/premium/auth</span>
+          </div>
+          <div class="termbody">
+            <p class="cmd"><span class="prompt">$</span> ge login --premium<span class="caret" aria-hidden="true"></span></p>
+            <div class="tabs">
+              <button type="button" id="tab-login" class="active">Log in</button>
+              <button type="button" id="tab-signup">Create account</button>
+            </div>
+            <form id="auth-form">
+              <div class="field">
+                <label for="email">Email</label>
+                <input id="email" type="email" autocomplete="email" placeholder="you@example.com" required>
+              </div>
+              <div class="field">
+                <label for="password">Password</label>
+                <input id="password" type="password" autocomplete="current-password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" required minlength="8">
+              </div>
+              <button class="button" type="submit" id="auth-submit">Log in</button>
+              <p class="status" id="auth-status" aria-live="polite"></p>
+            </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <p class="fineprint">New accounts need a password of at least 8 characters. Your login keeps you signed in on this device for 30 days.</p>
+          </div>
+        </div>
+        <div class="termwin perks">
+          <div class="termbar">
+            <span class="tdots" aria-hidden="true"><i class="on"></i><i></i><i></i></span>
+            <span class="termtitle">~/premium/features</span>
+          </div>
+          <div class="termbody feat">
+            <p><span class="prompt">&gt;</span><strong>Congressional trades</strong> <span class="dim">&mdash; Every disclosed buy and sell, tracked in one feed.</span></p>
+            <p><span class="prompt">&gt;</span><strong>Auto-updating</strong> <span class="dim">&mdash; New filings surface automatically, every 15 minutes.</span></p>
+            <p><span class="prompt">&gt;</span><strong>Members only</strong> <span class="dim">&mdash; One login unlocks the full Premium view.</span></p>
+          </div>
+        </div>
+      </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <section id="app-view" hidden>
+        <div class="hero">
+          <p class="eyebrow">Premium &middot; auto-updating</p>
+          <h1>Know what Congress is trading &mdash; first.</h1>
+          <p class="lede">A premium Good Expectations member tool. Every disclosed congressional stock trade, refreshed daily in your live feed.</p>
+        </div>
+        <div class="editor">
+          <div class="member-tabs" role="tablist" aria-label="Premium sections">
+            <button type="button" class="member-tab active" id="member-tab-trades" role="tab" aria-selected="true" aria-controls="panel-trades">Insider Trading Live Feed</button>
+            <button type="button" class="member-tab" id="member-tab-how" role="tab" aria-selected="false" aria-controls="panel-how">How It Works</button>
+            <button type="button" class="member-tab" id="member-tab-account" role="tab" aria-selected="false" aria-controls="panel-account">Account</button>
+            <button type="button" class="member-tab" id="member-tab-games" role="tab" aria-selected="false" aria-controls="panel-games">Video Games Made With AI</button><button type="button" class="member-tab" id="member-tab-warfront" role="tab" aria-selected="false" aria-controls="panel-warfront">Warfront</button>
+          </div>
+          <div class="member-panel" id="panel-trades" role="tabpanel" aria-labelledby="member-tab-trades">
+            <div class="feed-head">
+              <div>
+                <h2>Latest disclosures</h2>
+                <p class="panel-sub">Every trade, as soon as its disclosure goes public.</p>
+              </div>
+            </div>
+            <div class="termwin">
+              <div class="termbar">
+                <span class="tdots" aria-hidden="true"><i class="on"></i><i></i><i></i></span>
+                <span class="termtitle">~/feed/insider-trading-live</span>
+                <span class="bar-meta" id="feed-meta">Loading&hellip;</span>
+              </div>
+              <div class="table-shell">
+                <div class="loading" id="feed-loading">$ fetching the latest filings&hellip;</div>
+                <table id="trades-table" hidden>
+                  <thead>
+                    <tr>
+                      <th class="ln" scope="col">#</th><th>Politician</th><th>Issuer</th><th>Type</th><th>Size</th>
+                      <th>Traded</th><th>Published</th><th>Filed after</th>
+                    </tr>
+                  </thead>
+                  <tbody id="trades-body"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <div class="member-panel" id="panel-how" role="tabpanel" aria-labelledby="member-tab-how" hidden>
+            <div class="feed-head">
+              <div>
+                <h2>How it works</h2>
+                <p class="panel-sub">Where this data comes from &mdash; and why timing works the way it does.</p>
+              </div>
+            </div>
+            <div class="how-grid">
+              <article class="how-card">
+                <span class="how-index">Step 01</span>
+                <h3>Sourced from filings</h3>
+                <p>Every trade in this feed is drawn from public congressional financial disclosures, compiled from Capitol Trades&rsquo; filing database.</p>
+              </article>
+              <article class="how-card accent">
+                <span class="how-index">Step 02</span>
+                <h3>Disclosures can lag</h3>
+                <p>Under the STOCK Act, filings can arrive up to 45 days after the trade happens. That delay is built into the law &mdash; not the feed.</p>
+              </article>
+              <article class="how-card dark">
+                <span class="how-index">Step 03</span>
+                <h3>Always refreshing</h3>
+                <p>This feed reloads automatically every 15 minutes, so each trade appears the moment its disclosure goes public.</p>
+              </article>
+            </div>
+          </div>
+          <div class="member-panel" id="panel-account" role="tabpanel" aria-labelledby="member-tab-account" hidden>
+            <div class="feed-head">
+              <div>
+                <h2>Account</h2>
+                <p class="panel-sub">Your membership details.</p>
+              </div>
+            </div>
+            <div class="termwin account-card">
+              <div class="termbar">
+                <span class="tdots" aria-hidden="true"><i class="on"></i><i></i><i></i></span>
+                <span class="termtitle">~/premium/account</span>
+              </div>
+              <div class="termbody">
+                <div class="account-row">
+                  <span class="account-label">Signed in as</span>
+                  <span class="who" id="who-line" hidden></span>
+                </div>
+                <div class="account-row">
+                  <span class="account-label">Plan</span>
+                  <span class="account-value">Premium</span>
+                </div>
+                <button class="button" id="logout-btn" type="button" hidden>Log out</button>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+          <div class="member-panel" id="panel-games" role="tabpanel" aria-labelledby="member-tab-games" hidden>
+            <div class="feed-head">
+              <div>
+                <h2>Video Games Made With AI</h2>
+                <p class="panel-sub">Playable browser games built with AI &mdash; pick one and play.</p>
+              </div>
+            </div>
+            <div class="game-picker" role="group" aria-label="Select game">
+              <span class="prompt" aria-hidden="true">$</span><span class="cmd-name">select-game</span>
+              <button type="button" class="game-pick active" id="game-pick-fall-line" data-game="fall-line" aria-pressed="true"><span class="prompt">&gt;</span>fall-line</button>
+              <button type="button" class="game-pick" id="game-pick-turbo-kart" data-game="turbo-kart-rally" aria-pressed="false"><span class="prompt">&gt;</span>turbo-kart-rally</button>
+              <button type="button" class="game-pick" id="game-pick-transport-ship" data-game="transport-ship" aria-pressed="false"><span class="prompt">&gt;</span>transport-ship</button>
+            </div>
+            <div class="termwin">
+              <div class="termbar">
+                <span class="tdots" aria-hidden="true"><i class="on"></i><i></i><i></i></span>
+                <span class="termtitle"><span id="game-title">~/games/fall-line</span><span class="caret" aria-hidden="true"></span></span>
+                <span class="bar-meta" id="game-meta">FALL LINE &mdash; Freeride Mountain</span>
+              </div>
+              <div class="game-shell">
+                <iframe id="game-frame" title="FALL LINE &mdash; Freeride Mountain" loading="lazy" allow="fullscreen; gamepad; autoplay"></iframe>
+              </div>
+            </div>
+            <p class="game-note"><span class="prompt">$</span> ./play <span class="dim"># each game loads only when you pick it &mdash; the trades feed stays fast</span></p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <section class="member-panel" id="panel-warfront" role="tabpanel" aria-labelledby="member-tab-warfront" hidden><div class="feed-head"><div><h2>Warfront</h2><p class="panel-sub">GE conflict intel &mdash; a live feed, refreshed every 15 minutes.</p></div></div><div class="intel-shell"><div class="intel-head"><span class="intel-live" aria-hidden="true"></span><span>CONFLICT INTEL — LIVE FEED</span><span class="intel-updated" id="intel-updated"></span></div><ul class="intel-list" id="intel-list"><li class="intel-note">Loading intel feed…</li></ul></div></section>
+<footer>
+    <div class="wrap">
+      <span>Good Expectations &middot; Premium &copy; 2026</span>
+      <a href="/">Back to goodexpectation.com</a>
+    </div>
+  </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <script>
+    const authView = document.getElementById('auth-view');
+    const appView = document.getElementById('app-view');
+    const authForm = document.getElementById('auth-form');
+    const authStatus = document.getElementById('auth-status');
+    const authSubmit = document.getElementById('auth-submit');
+    const tabLogin = document.getElementById('tab-login');
+    const tabSignup = document.getElementById('tab-signup');
+    const whoLine = document.getElementById('who-line');
+    const logoutBtn = document.getElementById('logout-btn'); const crmLink = document.getElementById('crm-link');
+    let mode = 'login';
+    let refreshTimer = null; let intelTimer = null;
+    const memberTabTrades = document.getElementById('member-tab-trades');
+    const memberTabHow = document.getElementById('member-tab-how');
+    const memberTabAccount = document.getElementById('member-tab-account');
+    const memberTabGames = document.getElementById('member-tab-games'); const memberTabWarfront = document.getElementById('member-tab-warfront');
+    const panelTrades = document.getElementById('panel-trades');
+    const panelHow = document.getElementById('panel-how');
+    const panelAccount = document.getElementById('panel-account'); const panelWarfront = document.getElementById('panel-warfront');
+    const panelGames = document.getElementById('panel-games');
+    const memberTabs = [
+      [memberTabTrades, panelTrades],
+      [memberTabHow, panelHow],
+      [memberTabAccount, panelAccount],
+      [memberTabGames, panelGames], [memberTabWarfront, panelWarfront]
+    ];
+    const gamePickFallLine = document.getElementById('game-pick-fall-line');
+    const gamePickTurboKart = document.getElementById('game-pick-turbo-kart');
+    const gamePickTransportShip = document.getElementById('game-pick-transport-ship');
+    const gameFrame = document.getElementById('game-frame');
+    const gameTitle = document.getElementById('game-title');
+    const gameMeta = document.getElementById('game-meta');
+    const GAMES = {
+      'fall-line': {
+        src: 'https://nipale-ai.github.io/opus-5-5-overnight-builds/fall-line/',
+        path: '~/games/fall-line',
+        label: 'FALL LINE \u2014 Freeride Mountain'
+      },
+      'turbo-kart-rally': {
+        src: 'https://tikgame.org/mirror/turbo-kart-rally/turbo-kart-rally/',
+        path: '~/games/turbo-kart-rally',
+        label: 'TURBO KART RALLY \u2014 Kart Racing'
+      },
+      'transport-ship': {
+        src: 'https://tikgame.org/mirror/transport-ship/obj/eden-cn/nulojnulwlo/cf-transport-ship/transport-ship',
+        path: '~/games/transport-ship',
+        label: 'TRANSPORT SHIP'
+      }
+    };
+    const gamePicks = { 'fall-line': gamePickFallLine, 'turbo-kart-rally': gamePickTurboKart, 'transport-ship': gamePickTransportShip };
+    let activeGame = 'fall-line';
+    let gamesTabOpened = false;  
+    const loadedGames = {};
+    function selectGame(key) {
+      if (!GAMES[key]) return;
+      activeGame = key;
+      Object.keys(gamePicks).forEach(k => {
+        const on = k === key;
+        gamePicks[k].classList.toggle('active', on);
+        gamePicks[k].setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      const g = GAMES[key];
+      gameTitle.textContent = g.path;
+      gameMeta.textContent = g.label;
+      gameFrame.title = g.label;
+      if (!loadedGames[key] || gameFrame.getAttribute('src') !== GAMES[key].src) {
+        loadedGames[key] = true;
+        gameFrame.src = g.src;
+      }
+    }
+    gamePickFallLine.addEventListener('click', () => selectGame('fall-line'));
+    gamePickTurboKart.addEventListener('click', () => selectGame('turbo-kart-rally'));
+    gamePickTransportShip.addEventListener('click', () => selectGame('transport-ship'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function switchMemberTab(activeTab) {
+      memberTabs.forEach(([tab, panel]) => {
+        const on = tab === activeTab;
+        tab.classList.toggle('active', on);
+        tab.setAttribute('aria-selected', on ? 'true' : 'false');
+        panel.hidden = !on;
+      });
+       if (activeTab === memberTabGames && !gamesTabOpened) {
+        gamesTabOpened = true;
+        selectGame(activeGame);
+      }
+    }
+    memberTabs.forEach(([tab]) => tab.addEventListener('click', () => switchMemberTab(tab)));
+    function setMode(m) {
+      mode = m;
+      tabLogin.classList.toggle('active', m === 'login');
+      tabSignup.classList.toggle('active', m === 'signup');
+      authSubmit.textContent = m === 'login' ? 'Log in' : 'Create account';
+      document.getElementById('password').setAttribute('autocomplete', m === 'login' ? 'current-password' : 'new-password');
+      setStatus('');
+    }
+    function setStatus(msg, kind) {
+      authStatus.textContent = msg;
+      authStatus.className = 'status' + (kind ? ' ' + kind : '');
+    }
+    function showAuth() {
+      authView.hidden = false; appView.hidden = true;
+      whoLine.hidden = true; logoutBtn.hidden = true; if (crmLink) crmLink.hidden = true;
+    }
+    function showApp(email) {
+      authView.hidden = true; appView.hidden = false;
+      whoLine.textContent = email; whoLine.hidden = false; logoutBtn.hidden = false; if (crmLink) crmLink.hidden = false;
+      switchMemberTab(memberTabTrades);
+      loadTrades(); loadIntel();
+      if (!refreshTimer) refreshTimer = setInterval(loadTrades, 15 * 60 * 1000); if (!intelTimer) intelTimer = setInterval(loadIntel, 15 * 60 * 1000);
+    }
+    tabLogin.addEventListener('click', () => setMode('login'));
+    tabSignup.addEventListener('click', () => setMode('signup'));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    authForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      authSubmit.disabled = true;
+      setStatus(mode === 'login' ? 'Logging you in\u2026' : 'Creating your account\u2026');
+      try {
+        const r = await fetch('/api/auth/' + mode, {
+          method: 'POST', headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const d = await r.json().catch(() => ({}));
+        if (!r.ok) { setStatus(d.error || 'Something went wrong. Try again.', 'error'); return; }
+        setStatus('Welcome in.', 'ok');
+        showApp(d.email);
+      } catch {
+        setStatus('Could not reach the server. Check your connection.', 'error');
+      } finally {
+        authSubmit.disabled = false;
+      }
+    });
+    logoutBtn.addEventListener('click', async () => {
+      try { await fetch('/api/auth/logout', { method: 'POST' }); } catch { /* ignore */ }
+      if (refreshTimer) { clearInterval(refreshTimer); refreshTimer = null; } if (intelTimer) { clearInterval(intelTimer); intelTimer = null; }
+      setMode('login');
+      showAuth();
+    });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function esc(s) {
+      return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
+        ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+    }
+    async function loadIntel(){const list=document.getElementById('intel-list');const updated=document.getElementById('intel-updated');if(!list)return;try{const r=await fetch('/api/intel',{cache:'no-store'});if(r.status===401){showAuth();return;}if(!r.ok)throw new Error('intel');const d=await r.json();const items=Array.isArray(d.items)?d.items:[];if(updated&&d.updated_at){const udt=new Date(d.updated_at);if(!isNaN(udt))updated.textContent='UPDATED '+udt.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+udt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});}if(!items.length){list.innerHTML='<li class="intel-note">Feed is updating. Check back shortly.</li>';return;}const esc=s=>String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');list.innerHTML=items.map((it,i)=>{const dt=new Date(it.published_at);const time=isNaN(dt)?'':dt.toLocaleDateString('en-US',{month:'short',day:'numeric'})+' '+dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',hour12:false});const sum=it.summary?'<span class="intel-d">'+esc(it.summary)+'</span>':'';return '<li class="intel-row"><span class="intel-n">'+String(i+1).padStart(2,'0')+'</span><span class="intel-t">'+esc(time)+'</span><span class="intel-s">'+esc((it.source||'').toUpperCase())+'</span><span class="intel-title"><a class="intel-a" href="'+esc(it.url)+'" target="_blank" rel="noopener">'+esc(it.title)+'</a>'+sum+'</span></li>';}).join('');}catch(e){list.innerHTML='<li class="intel-note">Intel feed unavailable. Retrying&hellip;</li>';}} async function loadTrades() {
+      const loading = document.getElementById('feed-loading');
+      const table = document.getElementById('trades-table');
+      const body = document.getElementById('trades-body');
+      const meta = document.getElementById('feed-meta');
+      loading.hidden = false; table.hidden = true;
+      try {
+        const r = await fetch('/api/congress', { cache: 'no-store' });
+        if (r.status === 401) { showAuth(); return; }
+        if (!r.ok) throw new Error('feed');
+        const d = await r.json();
+        const trades = Array.isArray(d.trades) ? d.trades : [];
+        body.innerHTML = trades.map(t => {
+          const type = String(t.type || '').toLowerCase();
+          const badge = type.includes('buy') ? 'buy' : 'sell';
+          return '<tr>' +
+            '<td class="ln" aria-hidden="true"></td>' +
+            '<td class="pol"><strong>' + esc(t.politician) + '</strong><span>' + esc(t.party || '') + ' \u00b7 ' + esc(t.chamber || '') + ' ' + esc(t.state || '') + '</span></td>' +
+            '<td class="issuer"><strong>' + esc(t.issuer) + '</strong><span>' + esc(t.ticker || 'N/A') + '</span></td>' +
+            '<td><span class="badge ' + badge + '">' + esc(t.type) + '</span></td>' +
+            '<td class="num">' + esc(t.size || '\u2014') + '</td>' +
+            '<td class="num">' + esc(t.traded || '\u2014') + '</td>' +
+            '<td class="num">' + esc(t.published || '\u2014') + '</td>' +
+            '<td class="num">' + (t.filed_after_days != null ? esc(t.filed_after_days) + ' days' : '\u2014') + '</td>' +
+            '</tr>';
+        }).join('');
+        table.hidden = false; loading.hidden = true;
+        meta.textContent = 'Updated ' + esc(d.updated_at || 'recently') + ' \u00b7 ' + trades.length + ' trades';
+      } catch {
+        loading.textContent = 'The feed is updating. Check back shortly.';
+        meta.textContent = 'Feed unavailable';
+      }
+    }
+    (async function init() {
+      try {
+        const r = await fetch('/api/auth/session', { cache: 'no-store' });
+        if (r.ok) { const d = await r.json(); showApp(d.email); return; }
+      } catch { /* fall through to auth view */ }
+      showAuth();
+    })();
+  </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
