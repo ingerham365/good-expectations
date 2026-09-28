@@ -352,6 +352,9 @@ const STAGES = [
   { id: "lost",        label: "Lost",        p: 0 },
 ];
 const OPEN = ["lead", "contacted", "proposal", "negotiation"];
+/* "password": one shared CRM password (crm/ Worker). "account": sign in with a
+   Good Expectations account via /api/auth/* (goodexpectation.com). */
+const AUTH_MODE = "password";
 const STALE_DAYS = 14;
 const SOURCES = ["Referral", "Website", "Walk-in", "Social", "Cold outreach", "Event", "Other"];
 const RECUR = { none: "Doesn't repeat", daily: "Daily", weekly: "Weekly", biweekly: "Every 2 weeks", monthly: "Monthly" };
@@ -529,7 +532,10 @@ async function api(path, opts = {}) {
   });
   let data = {};
   try { data = await res.json(); } catch {}
-  if (res.status === 401 && path !== "/login") { S.mode = "login"; S.loginError = "Your session ended. Sign in again."; closeDrawer(); closeModal(); render(); throw new Error("Signed out"); }
+  if ((res.status === 401 || (res.status === 403 && /access/.test(data.error || ""))) && path !== "/login") {
+    S.mode = "login"; S.loginError = res.status === 403 ? data.error : "Your session ended. Sign in again.";
+    closeDrawer(); closeModal(); render(); throw new Error("Signed out");
+  }
   if (!res.ok) throw new Error(data.error || "Request failed (" + res.status + ")");
   return data;
 }
@@ -662,7 +668,7 @@ function matchesFor(f, excludeId) {
 const root = $("#root");
 function render() {
   if (S.mode === "loading") return;
-  if (S.mode === "login") { root.innerHTML = loginView(); $("#pw")?.focus(); return; }
+  if (S.mode === "login") { root.innerHTML = loginView(); ($("#login-email") || $("#pw"))?.focus(); return; }
   const scrollY = window.scrollY;
   const boardScroll = $(".board")?.scrollLeft;
   root.innerHTML = shell();
@@ -674,7 +680,8 @@ function render() {
 function loginView() {
   return `<div class="login"><form class="login-card" data-form="login">
     <div class="brand" style="padding:0"><span class="brand-mark">GE</span><div><div class="brand-name">Good Expectations</div><div class="brand-sub">CRM</div></div></div>
-    <div><h1>Sign in</h1><p class="muted" style="margin:6px 0 0">Enter your CRM password to see your contacts and pipeline.</p></div>
+    <div><h1>Sign in</h1><p class="muted" style="margin:6px 0 0">${AUTH_MODE === "account" ? "Use your Good Expectations account to see your contacts and pipeline." : "Enter your CRM password to see your contacts and pipeline."}</p></div>
+    ${AUTH_MODE === "account" ? `<div class="field"><label for="login-email">Email</label><input class="input" id="login-email" name="email" type="email" autocomplete="email" required></div>` : ""}
     <div class="field"><label for="pw">Password</label><input class="input" id="pw" name="password" type="password" autocomplete="current-password" required></div>
     ${S.loginError ? `<div class="form-error" role="alert">${esc(S.loginError)}</div>` : ""}
     <button class="btn btn-primary" type="submit" style="height:42px">Sign in</button>
@@ -1235,7 +1242,7 @@ const ACTIONS = {
     document.documentElement.setAttribute("data-theme", next);
     try { localStorage.setItem("ge-crm-theme", next); } catch {}
   },
-  logout: async () => { try { await api("/logout", J("POST", {})); } catch {} S.mode = "login"; S.loginError = ""; S.data = { contacts: [], deals: [], tasks: [], activities: [] }; closeDrawer(); render(); },
+  logout: async () => { try { if (AUTH_MODE === "account") await fetch("/api/auth/logout", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json" }, body: "{}" }); else await api("/logout", J("POST", {})); } catch {} S.mode = "login"; S.loginError = ""; S.data = { contacts: [], deals: [], tasks: [], activities: [] }; closeDrawer(); render(); },
   "reset-demo": () => { S.data = seedDemo(); closeDrawer(); render(); toast("Sample data reset"); },
   "new-contact": () => contactForm(),
   "edit-contact": (el) => contactForm(contactById(el.dataset.id)),
@@ -1334,8 +1341,17 @@ document.addEventListener("submit", async (e) => {
     if (kind === "login") {
       S.loginError = "";
       const btn = form.querySelector("button[type=submit]"); btn.disabled = true; btn.textContent = "Signing in…";
-      try { await api("/login", J("POST", { password: f.password })); await reload(); S.mode = "app"; render(); }
-      catch (err) { S.loginError = err.message; render(); }
+      try {
+        if (AUTH_MODE === "account") {
+          const r = await fetch("/api/auth/login", { method: "POST", credentials: "same-origin", headers: { "content-type": "application/json" }, body: JSON.stringify({ email: f.email, password: f.password }) });
+          const d = await r.json().catch(() => ({}));
+          if (!r.ok) throw new Error(d.error || "Couldn't sign in.");
+        } else {
+          await api("/login", J("POST", { password: f.password }));
+        }
+        await reload(); S.mode = "app"; S.loginError = ""; render();
+      }
+      catch (err) { S.mode = "login"; if (err.message !== "Signed out") S.loginError = err.message; render(); }
     } else if (kind === "contact") {
       if (!f.name.trim()) { $("#cf-name").focus(); return fail("Add a name."); }
       if (form.dataset.id) { await B.updateContact(form.dataset.id, f); closeModal(); toast("Contact saved"); }
@@ -1389,6 +1405,7 @@ async function boot() {
   try { res = await fetch("/api/crm/me", { credentials: "same-origin" }); } catch { return startDemo(); }
   if (!(res.headers.get("content-type") || "").includes("application/json")) return startDemo();
   if (res.status === 401) { S.mode = "login"; return render(); }
+  if (res.status === 403) { const d = await res.json().catch(() => ({})); S.mode = "login"; S.loginError = d.error || "This account doesn't have access to the CRM."; return render(); }
   if (!res.ok) { const d = await res.json().catch(() => ({})); S.mode = "login"; S.loginError = d.error || "The CRM server isn't responding."; return render(); }
   try { await reload(); S.mode = "app"; render(); } catch (e) { S.mode = "login"; S.loginError = e.message; render(); }
 }
