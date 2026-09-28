@@ -183,6 +183,18 @@ async function handleApi(req, env, path) {
       if (stmts.length) await db.batch(stmts);
       return json({ imported: created.length, contacts: created });
     }
+    if (id === "bulk-delete" && method === "POST") {
+      const ids = [...new Set((Array.isArray(body.ids) ? body.ids : []).map((x) => str(x, 64)).filter(Boolean))].slice(0, 100);
+      if (!ids.length) return err("No contacts selected.");
+      const marks = ids.map(() => "?").join(",");
+      await db.batch([
+        db.prepare(`UPDATE deals SET contact_id=NULL WHERE contact_id IN (${marks})`).bind(...ids),
+        db.prepare(`UPDATE tasks SET contact_id=NULL WHERE contact_id IN (${marks})`).bind(...ids),
+        db.prepare(`DELETE FROM activities WHERE contact_id IN (${marks})`).bind(...ids),
+        db.prepare(`DELETE FROM contacts WHERE id IN (${marks})`).bind(...ids),
+      ]);
+      return json({ deleted: ids.length });
+    }
     if (id === "merge" && method === "POST") {
       const keep = str(body.keep_id, 64), drop = str(body.merge_id, 64);
       if (!keep || !drop || keep === drop) return err("Pick two different contacts");

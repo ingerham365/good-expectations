@@ -191,6 +191,14 @@ table.data{width:100%;border-collapse:collapse;min-width:820px}
 .cell-link{color:var(--ink-2);text-decoration:none;white-space:nowrap}
 .cell-link:hover{color:var(--accent);text-decoration:underline}
 .contact-cards{display:none}
+.sel-col{width:44px;padding-right:0!important}
+.data tbody tr.picked{background:var(--accent-soft)}
+.data tbody tr.picked:hover{background:var(--accent-soft)}
+.sel-bar{position:sticky;top:8px;z-index:5;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:9px 12px 9px 16px;margin-bottom:10px;border-radius:var(--radius);background:var(--ink);color:var(--surface);box-shadow:var(--shadow-lg)}
+.sel-bar .btn-ghost{color:var(--surface)}
+.sel-bar .btn-ghost:hover{background:rgba(255,255,255,.12)}
+.sel-bar .sel-delete{margin-left:auto;background:var(--danger);border-color:var(--danger);color:#fff}
+.sel-bar .sel-delete:hover{filter:brightness(1.08);background:var(--danger)}
 
 /* ---------- pipeline ---------- */
 .pipe-summary{display:flex;flex-wrap:wrap;gap:8px 24px;margin-bottom:16px;font-size:14px;color:var(--muted)}
@@ -318,6 +326,7 @@ table.data{width:100%;border-collapse:collapse;min-width:820px}
   .contact-cards{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
   .contact-card{display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--line);cursor:pointer}
   .contact-card:first-child{border-top:0}
+  .contact-card.picked{background:var(--accent-soft)}
   .contact-card .right{margin-left:auto;text-align:right;font-size:12.5px;color:var(--muted)}
   .board{grid-template-columns:repeat(6,minmax(78vw,1fr));scroll-snap-type:x mandatory}
   .col{scroll-snap-align:start}
@@ -363,7 +372,7 @@ const AVATAR_COLORS = ["#13624F", "#3E7CB1", "#7B61C9", "#B7800F", "#B8483B", "#
 const S = {
   mode: "loading", demo: false, view: "today",
   data: { contacts: [], deals: [], tasks: [], activities: [] },
-  q: "", tag: "", sort: "name", showDone: false,
+  q: "", tag: "", sort: "name", showDone: false, selected: new Set(), lastPick: null,
   drawerContact: null, composerType: "note", loginError: "",
 };
 
@@ -388,7 +397,11 @@ function fmtPhone(p) {
   if (d.length === 11 && d[0] === "1") return `+1 (${d.slice(1, 4)}) ${d.slice(4, 7)}-${d.slice(7)}`;
   return p || "";
 }
-function initials(name) { const p = String(name || "?").trim().split(/\s+/); return ((p[0] || "?")[0] + (p.length > 1 ? p[p.length - 1][0] : "")).toUpperCase(); }
+function initials(name) {
+  const words = String(name || "?").trim().split(/\s+/);
+  const p = words.filter((w) => /^[A-Za-z]/.test(w)).length ? words.filter((w) => /^[A-Za-z]/.test(w)) : words; // skip house numbers like "10205" or "#304"
+  return ((p[0] || "?")[0] + (p.length > 1 ? p[p.length - 1][0] : "")).toUpperCase();
+}
 function avatarColor(s) { let h = 0; for (const c of String(s)) h = (h * 31 + c.charCodeAt(0)) >>> 0; return AVATAR_COLORS[h % AVATAR_COLORS.length]; }
 function avatar(c) { return `<span class="avatar" style="background:${avatarColor(c.id + c.name)}" aria-hidden="true">${esc(initials(c.name))}</span>`; }
 function relTime(iso) {
@@ -454,6 +467,13 @@ const L = {
   },
   createContact(f) { const ts = nowISO(); const c = { id: uid(), ...cleanContact(f), created_at: ts, updated_at: ts }; S.data.contacts.push(c); return c; },
   updateContact(id, f) { const c = contactById(id); Object.assign(c, cleanContact({ ...c, ...f }), { updated_at: nowISO() }); return c; },
+  deleteContacts(ids) {
+    const gone = new Set(ids);
+    S.data.contacts = S.data.contacts.filter((c) => !gone.has(c.id));
+    S.data.deals.forEach((d) => { if (gone.has(d.contact_id)) d.contact_id = null; });
+    S.data.tasks.forEach((t) => { if (gone.has(t.contact_id)) t.contact_id = null; });
+    S.data.activities = S.data.activities.filter((a) => !gone.has(a.contact_id));
+  },
   deleteContact(id) {
     S.data.contacts = S.data.contacts.filter((c) => c.id !== id);
     S.data.deals.forEach((d) => { if (d.contact_id === id) d.contact_id = null; });
@@ -562,6 +582,9 @@ const B = {
   createContact: (f) => change(() => L.createContact(f), () => api("/contacts", J("POST", f))),
   updateContact: (id, f) => change(() => L.updateContact(id, f), () => api("/contacts/" + id, J("PATCH", f))),
   deleteContact: (id) => change(() => L.deleteContact(id), () => api("/contacts/" + id, { method: "DELETE" })),
+  deleteContacts: (ids) => change(() => L.deleteContacts(ids), async () => {
+    for (let i = 0; i < ids.length; i += 100) await api("/contacts/bulk-delete", J("POST", { ids: ids.slice(i, i + 100) }));
+  }),
   mergeContacts: (keep, drop) => change(() => L.mergeContacts(keep, drop), () => api("/contacts/merge", J("POST", { keep_id: keep, merge_id: drop }))),
   importContacts: (rows) => change(() => L.importContacts(rows), () => api("/contacts/import", J("POST", { rows }))),
   createDeal: (f) => change(() => L.createDeal(f), () => api("/deals", J("POST", f))),
@@ -814,6 +837,18 @@ function feed(list, showContact) {
 }
 
 /* ---------- Contacts ---------- */
+function selectionBar(list) {
+  for (const id of S.selected) if (!contactById(id)) S.selected.delete(id);
+  const n = S.selected.size;
+  if (!n) return "";
+  const unpicked = list.filter((c) => !S.selected.has(c.id)).length;
+  return `<div class="sel-bar" role="region" aria-label="Selected contacts">
+    <strong>${plural(n, "contact")} selected</strong>
+    ${unpicked ? `<button class="btn btn-ghost btn-sm" data-action="select-shown">Select all ${list.length} shown</button>` : ""}
+    <button class="btn btn-ghost btn-sm" data-action="select-clear">Clear</button>
+    <button class="btn btn-sm sel-delete" data-action="delete-selected">${ICON.x}Delete ${n}</button>
+  </div>`;
+}
 function filteredContacts() {
   const q = S.q.trim().toLowerCase();
   const list = S.data.contacts.filter((c) => {
@@ -854,8 +889,9 @@ function viewContacts() {
   </div>
   ${!S.data.contacts.length ? `<div class="panel"><div class="empty"><h3>No contacts yet</h3>Add your first contact or import a spreadsheet.<br><button class="btn btn-primary" data-action="new-contact">${ICON.plus}Add contact</button> <button class="btn" data-action="import">${ICON.upload}Import CSV</button></div></div>`
   : !list.length ? `<div class="panel"><div class="empty"><h3>No matches</h3>Try a different search or clear the tag filter.</div></div>`
-  : `<div class="table-wrap"><table class="data"><thead><tr><th>Name</th><th>Company</th><th>Email</th><th>Phone</th><th>Tags</th><th class="r">Open value</th><th class="r">Last touch</th></tr></thead><tbody>
-    ${list.map((c) => { const v = contactOpenValue(c.id); return `<tr data-action="open-contact" data-id="${c.id}">
+  : `${selectionBar(list)}<div class="table-wrap"><table class="data"><thead><tr><th class="sel-col"><input type="checkbox" class="check" data-action="select-all" aria-label="Select all ${list.length} shown" ${list.length && list.every((c) => S.selected.has(c.id)) ? "checked" : ""}></th><th>Name</th><th>Company</th><th>Email</th><th>Phone</th><th>Tags</th><th class="r">Open value</th><th class="r">Last touch</th></tr></thead><tbody>
+    ${list.map((c) => { const v = contactOpenValue(c.id); const on = S.selected.has(c.id); return `<tr data-action="open-contact" data-id="${c.id}"${on ? ' class="picked"' : ""}>
+      <td class="sel-col"><input type="checkbox" class="check" data-action="select-row" data-id="${c.id}" ${on ? "checked" : ""} aria-label="Select ${esc(c.name)}"></td>
       <td><div class="person">${avatar(c)}<div style="min-width:0"><div class="person-name">${esc(c.name)}</div>${c.title ? `<div class="person-sub">${esc(c.title)}</div>` : ""}</div></div></td>
       <td>${esc(c.company) || '<span class="muted">—</span>'}</td>
       <td>${c.email ? `<a class="cell-link" href="mailto:${esc(c.email)}" data-stop>${esc(c.email)}</a>` : '<span class="muted">—</span>'}</td>
@@ -864,7 +900,7 @@ function viewContacts() {
       <td class="r num">${v ? money(v) : '<span class="muted">—</span>'}</td>
       <td class="r muted" style="white-space:nowrap">${relTime(lastTouch(c))}</td></tr>`; }).join("")}
   </tbody></table></div>
-  <div class="contact-cards">${list.map((c) => `<div class="contact-card" data-action="open-contact" data-id="${c.id}">${avatar(c)}<div style="min-width:0"><div class="person-name">${esc(c.name)}</div><div class="person-sub">${esc([c.company, fmtPhone(c.phone)].filter(Boolean).join(" · "))}</div></div><div class="right">${contactOpenValue(c.id) ? `<div class="num" style="color:var(--ink)">${money(contactOpenValue(c.id))}</div>` : ""}${relTime(lastTouch(c))}</div></div>`).join("")}</div>`}`;
+  <div class="contact-cards">${list.map((c) => `<div class="contact-card${S.selected.has(c.id) ? " picked" : ""}" data-action="open-contact" data-id="${c.id}"><input type="checkbox" class="check" data-action="select-row" data-id="${c.id}" ${S.selected.has(c.id) ? "checked" : ""} aria-label="Select ${esc(c.name)}">${avatar(c)}<div style="min-width:0"><div class="person-name">${esc(c.name)}</div><div class="person-sub">${esc([c.company, fmtPhone(c.phone)].filter(Boolean).join(" · "))}</div></div><div class="right">${contactOpenValue(c.id) ? `<div class="num" style="color:var(--ink)">${money(contactOpenValue(c.id))}</div>` : ""}${relTime(lastTouch(c))}</div></div>`).join("")}</div>`}`;
 }
 
 /* ---------- Pipeline ---------- */
@@ -1229,7 +1265,7 @@ function toast(msg, kind = "", undo) {
 /* =========================================================
    Events
    ========================================================= */
-function go(view) { S.view = view; closeDrawer(); render(); window.scrollTo(0, 0); }
+function go(view) { S.view = view; if (view !== "contacts") S.selected.clear(); closeDrawer(); render(); window.scrollTo(0, 0); }
 
 const ACTIONS = {
   go: (el) => go(el.dataset.view),
@@ -1248,6 +1284,16 @@ const ACTIONS = {
   "edit-contact": (el) => contactForm(contactById(el.dataset.id)),
   "open-contact": (el) => { closeModal(); closePalette(); openContact(el.dataset.id); },
   "close-drawer": () => closeDrawer(),
+  "select-shown": () => { filteredContacts().forEach((c) => S.selected.add(c.id)); render(); },
+  "select-clear": () => { S.selected.clear(); S.lastPick = null; render(); },
+  "delete-selected": async () => {
+    const ids = [...S.selected].filter((id) => contactById(id));
+    if (!ids.length) return;
+    const names = ids.slice(0, 3).map((id) => contactById(id).name).join(", ") + (ids.length > 3 ? ` and ${ids.length - 3} more` : "");
+    if (!(await confirmBox(`Delete ${plural(ids.length, "contact")}?`, `${names}. Their timelines are deleted too; deals and tasks stay but lose the link. This can't be undone.`, `Delete ${ids.length}`))) return;
+    S.selected.clear(); S.lastPick = null; closeDrawer();
+    try { await B.deleteContacts(ids); toast(`Deleted ${plural(ids.length, "contact")}`); } catch {}
+  },
   "delete-contact": async (el) => {
     const c = contactById(el.dataset.id);
     if (!(await confirmBox(`Delete ${c.name}?`, "Their timeline is deleted too. Deals and tasks stay but lose the link to this contact. This can't be undone."))) return;
@@ -1286,6 +1332,8 @@ const ACTIONS = {
   "confirm-yes": () => { const r = modalResolve; modalResolve = null; closeModal(); r && r(true); },
 };
 
+let shiftHeld = false; // remembered from the click so shift-click can select a range of contacts
+document.addEventListener("click", (e) => { shiftHeld = e.shiftKey; }, true);
 document.addEventListener("click", (e) => {
   if (e.target.closest("[data-stop]")) return; // mailto/tel links inside clickable rows
   const el = e.target.closest("[data-action]");
@@ -1297,6 +1345,18 @@ document.addEventListener("click", (e) => {
 document.addEventListener("change", (e) => {
   const el = e.target;
   if (el.classList.contains("check") && el.dataset.action === "toggle-task") { ACTIONS["toggle-task"](el).catch(() => {}); return; }
+  if (el.dataset.action === "select-all") {
+    const list = filteredContacts();
+    if (el.checked) list.forEach((c) => S.selected.add(c.id)); else list.forEach((c) => S.selected.delete(c.id));
+    S.lastPick = null; render(); return;
+  }
+  if (el.dataset.action === "select-row") {
+    const list = filteredContacts(); const id = el.dataset.id;
+    const i = list.findIndex((c) => c.id === id), j = list.findIndex((c) => c.id === S.lastPick);
+    if (shiftHeld && j >= 0 && i >= 0) { for (let k = Math.min(i, j); k <= Math.max(i, j); k++) el.checked ? S.selected.add(list[k].id) : S.selected.delete(list[k].id); }
+    else el.checked ? S.selected.add(id) : S.selected.delete(id);
+    S.lastPick = id; render(); return;
+  }
   const k = el.dataset.change;
   if (k === "tag") { S.tag = el.value; render(); }
   else if (k === "sort") { S.sort = el.value; render(); }
@@ -1327,6 +1387,8 @@ document.addEventListener("keydown", (e) => {
   if ((e.key === "Enter" || e.key === " ") && t.matches?.('[role="button"][data-action], article.deal')) { e.preventDefault(); t.click(); return; }
   if (isTyping(document.activeElement) || S.mode !== "app" || !modalRoot.hidden || e.metaKey || e.ctrlKey || e.altKey) return;
   if (e.key === "/") { e.preventDefault(); if (S.view !== "contacts") go("contacts"); $("#contact-search")?.focus(); }
+  else if ((e.key === "Delete" || e.key === "Backspace") && S.view === "contacts" && S.selected.size && drawerRoot.hidden) { e.preventDefault(); ACTIONS["delete-selected"]().catch(() => {}); }
+  else if (e.key === "Escape" && S.selected.size) { S.selected.clear(); render(); }
   else if (e.key === "n" && drawerRoot.hidden) { e.preventDefault(); ({ today: () => dealForm(), contacts: () => contactForm(), pipeline: () => dealForm(), tasks: () => $("#qt-title")?.focus() })[S.view](); }
   else if (["1", "2", "3", "4"].includes(e.key) && drawerRoot.hidden) go(["today", "contacts", "pipeline", "tasks"][+e.key - 1]);
 });
