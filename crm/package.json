@@ -1,0 +1,14 @@
+{
+  "name": "good-expectations-crm",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs && wrangler dev",
+    "db:init": "wrangler d1 execute good-expectations-crm --remote --file=schema.sql",
+    "deploy": "node build.mjs && wrangler deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^4.0.0"
+  }
+}

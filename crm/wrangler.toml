@@ -1,0 +1,17 @@
+name = "good-expectations-crm"
+main = "src/worker.js"
+compatibility_date = "2026-09-01"
+
+# Serve the app and API on your domain. Comment these routes out to test
+# on the *.workers.dev URL first.
+routes = [
+  { pattern = "goodexpectation.com/crm*", zone_name = "goodexpectation.com" },
+  { pattern = "goodexpectation.com/api/crm*", zone_name = "goodexpectation.com" }
+]
+
+rules = [{ type = "Text", globs = ["**/*.html"], fallthrough = true }]
+
+[[d1_databases]]
+binding = "DB"
+database_name = "good-expectations-crm"
+database_id = "REPLACE_WITH_YOUR_D1_DATABASE_ID"
